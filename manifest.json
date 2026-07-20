@@ -1,0 +1,19 @@
+{
+  "name": "OdontoCloud — Gestão Clínica",
+  "short_name": "OdontoCloud",
+  "description": "Gestão clínica odontológica — pacientes, agenda, financeiro, periograma, prótese e faturação.",
+  "id": "/odontocloud-prototipo_7_5.html",
+  "start_url": "./odontocloud-prototipo_7_5.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F6F6FB",
+  "theme_color": "#4F46E5",
+  "lang": "pt-PT",
+  "dir": "ltr",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
