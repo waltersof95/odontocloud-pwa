@@ -271,8 +271,12 @@ button{font-family:inherit;cursor:pointer;border:0;background:none}
 .cal .ch.today .dd{color:var(--indigo)}
 .cal .ch.today{background:var(--indigo-50)}
 .cal .hr-lbl{font-size:11px;color:var(--muted);padding:6px 8px;text-align:right;border-top:1px solid var(--line-2)}
-.cal .cell{border-top:1px solid var(--line-2);border-left:1px solid var(--line-2);min-height:54px;position:relative;padding:3px}
-.appt{border-radius:8px;padding:6px 8px;font-size:11px;line-height:1.35;margin-bottom:3px;border-left:3px solid}
+.cal .cell{border-top:1px solid var(--line-2);border-left:1px solid var(--line-2);min-height:54px;position:relative;padding:3px;cursor:pointer;transition:background .12s}
+.cal .cell:hover{background:var(--indigo-50)}
+.cal .cell.drag-over{background:var(--indigo-50);outline:2px dashed var(--indigo);outline-offset:-2px}
+.appt{border-radius:8px;padding:6px 8px;font-size:11px;line-height:1.35;margin-bottom:3px;border-left:3px solid;cursor:grab;transition:box-shadow .12s}
+.appt:hover{box-shadow:var(--sh-sm)}
+.appt.dragging{opacity:.4}
 .appt .nm{font-weight:600}
 .appt.a1{background:var(--indigo-50);border-color:var(--indigo)}
 .appt.a2{background:var(--green-50);border-color:var(--green)}
@@ -1205,11 +1209,40 @@ function renderCal(){
   horas.forEach((h,hi)=>{
     html+=`<div class="hr-lbl">${h}</div>`;
     for(let di=0;di<7;di++){
-      const a=appts[`${di}-${hi}`];
-      html+=`<div class="cell">${a?`<div class="appt ${a[0]}"><div class="nm">${a[1]}</div>${a[2]}</div>`:''}</div>`;
+      const key=`${di}-${hi}`;
+      const a=appts[key];
+      html+=`<div class="cell" data-cell="${key}" title="${a?'':'Clique para agendar'}">${a?`<div class="appt ${a[0]}" draggable="true" data-appt="${key}" title="Clique para editar · arraste para mudar de horário"><div class="nm">${a[1]}</div>${a[2]}</div>`:''}</div>`;
     }
   });
   cal.innerHTML=html;
+  wireCalInteractions();
+}
+function wireCalInteractions(){
+  cal.querySelectorAll('.appt').forEach(el=>{
+    el.addEventListener('click',e=>{e.stopPropagation();openAgendaModal(el.dataset.appt);});
+    el.addEventListener('dragstart',e=>{
+      e.dataTransfer.setData('text/plain',el.dataset.appt);
+      e.dataTransfer.effectAllowed='move';
+      setTimeout(()=>el.classList.add('dragging'),0);
+    });
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+  });
+  cal.querySelectorAll('.cell').forEach(el=>{
+    el.addEventListener('click',()=>{if(!appts[el.dataset.cell])openAgendaModal(null,el.dataset.cell);});
+    el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('drag-over');});
+    el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));
+    el.addEventListener('drop',e=>{
+      e.preventDefault();el.classList.remove('drag-over');
+      const fromKey=e.dataTransfer.getData('text/plain');
+      const toKey=el.dataset.cell;
+      if(!fromKey||!appts[fromKey]||fromKey===toKey)return;
+      if(appts[toKey]&&!confirm('Já existe uma marcação nesse horário ('+appts[toKey][1]+'). Substituir?'))return;
+      appts[toKey]=appts[fromKey];
+      delete appts[fromKey];
+      renderCal();
+      toast('Marcação movida para '+dias[toKey.split('-')[0]][0]+' às '+horas[toKey.split('-')[1]]+'.');
+    });
+  });
 }
 renderCal();
 
@@ -1229,18 +1262,38 @@ document.getElementById('agenda-view-seg')?.addEventListener('click',e=>{
 ['agenda-prev','agenda-next','agenda-hoje'].forEach(id=>{
   document.getElementById(id)?.addEventListener('click',()=>toast('Navegação de datas ainda não implementada neste protótipo — dados de exemplo fixos na semana atual.'));
 });
-document.getElementById('btn-agendar')?.addEventListener('click',()=>{
-  const box=miniModal(`<div class="modal-h"><h3>Agendar consulta</h3><span class="modal-x" data-x>&times;</span></div>
+const escAgenda=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function openAgendaModal(existingKey,prefillKey){
+  const existing=existingKey?appts[existingKey]:null;
+  const dhKey=existingKey||prefillKey;
+  const defDia=dhKey?+dhKey.split('-')[0]:0, defHora=dhKey?+dhKey.split('-')[1]:0;
+  const box=miniModal(`<div class="modal-h"><h3>${existing?'Editar marcação':'Agendar consulta'}</h3><span class="modal-x" data-x>&times;</span></div>
   <div class="modal-b">
-    <div class="field"><label>Paciente *</label><input id="ag-pac" placeholder="Nome do paciente"></div>
-    <div class="field" style="margin-top:10px"><label>Procedimento</label><input id="ag-proc" placeholder="Ex.: Avaliação, Limpeza…"></div>
+    <div class="field"><label>Paciente *</label><input id="ag-pac" placeholder="Nome do paciente" value="${existing?escAgenda(existing[1]):''}"></div>
+    <div class="field" style="margin-top:10px"><label>Procedimento</label><input id="ag-proc" placeholder="Ex.: Avaliação, Limpeza…" value="${existing?escAgenda(existing[2]):''}"></div>
     <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:10px">
-      <div class="field"><label>Dia</label><select id="ag-dia">${dias.map((d,i)=>`<option value="${i}">${d[0]} · ${d[1]}/06</option>`).join('')}</select></div>
-      <div class="field"><label>Hora</label><select id="ag-hora">${horas.map((h,i)=>`<option value="${i}">${h}</option>`).join('')}</select></div>
-      <div class="field" style="grid-column:1/-1"><label>Profissional</label><select id="ag-prof"><option value="a1">Mona Pinho de Oliveira</option><option value="a2">Ricardo Campos</option><option value="a3">Juliana Lemos</option><option value="a4">Outro</option></select></div>
+      <div class="field"><label>Dia</label><select id="ag-dia">${dias.map((d,i)=>`<option value="${i}" ${defDia===i?'selected':''}>${d[0]} · ${d[1]}/06</option>`).join('')}</select></div>
+      <div class="field"><label>Hora</label><select id="ag-hora">${horas.map((h,i)=>`<option value="${i}" ${defHora===i?'selected':''}>${h}</option>`).join('')}</select></div>
+      <div class="field" style="grid-column:1/-1"><label>Profissional</label><select id="ag-prof">
+        <option value="a1" ${existing&&existing[0]==='a1'?'selected':''}>Mona Pinho de Oliveira</option>
+        <option value="a2" ${existing&&existing[0]==='a2'?'selected':''}>Ricardo Campos</option>
+        <option value="a3" ${existing&&existing[0]==='a3'?'selected':''}>Juliana Lemos</option>
+        <option value="a4" ${existing&&existing[0]==='a4'?'selected':''}>Outro</option>
+      </select></div>
     </div>
   </div>
-  <div class="modal-f"><button class="btn btn-ghost" data-x>Cancelar</button><button class="btn btn-primary" id="ag-save">Agendar</button></div>`);
+  <div class="modal-f">
+    ${existing?'<button class="btn btn-ghost" id="ag-del" style="color:var(--red);margin-right:auto">Eliminar marcação</button>':''}
+    <button class="btn btn-ghost" data-x>Cancelar</button>
+    <button class="btn btn-primary" id="ag-save">${existing?'Guardar alterações':'Agendar'}</button>
+  </div>`);
+  box.querySelector('#ag-del')?.addEventListener('click',()=>{
+    if(!confirm('Eliminar esta marcação?'))return;
+    delete appts[existingKey];
+    renderCal();
+    document.getElementById('modal-root').classList.remove('show');
+    toast('Marcação eliminada.');
+  });
   box.querySelector('#ag-save').onclick=()=>{
     const pac=box.querySelector('#ag-pac').value.trim();
     if(!pac){toast('Indique o nome do paciente.');return;}
@@ -1248,13 +1301,15 @@ document.getElementById('btn-agendar')?.addEventListener('click',()=>{
     const di=box.querySelector('#ag-dia').value, hi=box.querySelector('#ag-hora').value;
     const prof=box.querySelector('#ag-prof').value;
     const key=di+'-'+hi;
-    if(appts[key]&&!confirm('Já existe uma marcação nesse horário ('+appts[key][1]+'). Substituir?'))return;
+    if(key!==existingKey && appts[key] && !confirm('Já existe uma marcação nesse horário ('+appts[key][1]+'). Substituir?'))return;
+    if(existingKey && key!==existingKey) delete appts[existingKey];
     appts[key]=[prof,pac,proc];
     renderCal();
     document.getElementById('modal-root').classList.remove('show');
-    toast('Consulta agendada para '+dias[di][0]+' às '+horas[hi]+'.');
+    toast(existing?'Marcação atualizada.':'Consulta agendada para '+dias[di][0]+' às '+horas[hi]+'.');
   };
-});
+}
+document.getElementById('btn-agendar')?.addEventListener('click',()=>openAgendaModal(null,null));
 
 /* ---------- Popovers do topbar (notificações / ajuda) ---------- */
 function togglePop(btnId,popId){
