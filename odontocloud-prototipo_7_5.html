@@ -76,6 +76,27 @@ button{font-family:inherit;cursor:pointer;border:0;background:none}
 /* ===================== SHELL ===================== */
 .app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
 
+/* ---- Tela de acesso ---- */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--ink) 0%,#1c2046 45%,var(--indigo) 100%);padding:24px}
+.login-card{width:100%;max-width:400px;background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:36px 32px}
+.login-brand{display:flex;flex-direction:column;align-items:center;gap:9px;margin-bottom:20px;text-align:center}
+.login-brand .mark{width:52px;height:52px;border-radius:15px;background:var(--grad);display:grid;place-items:center;box-shadow:0 8px 22px rgba(124,58,237,.35)}
+.login-brand .mark svg{width:28px;height:28px}
+.login-brand .name{font-family:"Sora",sans-serif;font-weight:700;font-size:20px;letter-spacing:-.02em}
+.login-brand .sub{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.login-clinic{text-align:center;font-size:12.5px;color:var(--slate);background:var(--bg);border-radius:10px;padding:8px 12px;margin-bottom:22px}
+.login-error{background:var(--red-50);color:var(--red);font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:9px;margin-top:12px}
+.login-submit{width:100%;justify-content:center;margin-top:18px;padding:11px}
+.login-hint{text-align:center;font-size:11px;color:var(--muted);margin-top:14px;line-height:1.5}
+.login-divider{display:flex;align-items:center;gap:10px;margin:22px 0 14px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.login-divider::before,.login-divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.login-quick{display:flex;flex-direction:column;gap:8px}
+.login-quick-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--line);border-radius:11px;text-align:left;transition:.12s;width:100%}
+.login-quick-item:hover{border-color:var(--indigo);background:var(--indigo-50)}
+.login-quick-item .lq-t{display:flex;flex-direction:column;line-height:1.3}
+.login-quick-item .lq-t b{font-size:12.5px;color:var(--ink)}
+.login-quick-item .lq-t span{font-size:11px;color:var(--muted)}
+
 /* ---- Sidebar ---- */
 .sidebar{
   background:var(--ink);color:#C9CCE4;position:sticky;top:0;height:100vh;
@@ -319,7 +340,31 @@ input[type=color]{border:1px solid var(--line);border-radius:10px;background:#ff
 </style>
 </head>
 <body>
-<div class="app">
+
+<!-- ==================== TELA DE ACESSO ==================== -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3c-2.2 0-3.2 1.1-5 1.1C5.4 4.1 4 3.6 4 6.5c0 3.4 1.1 6.2 2 9 .7 2.2 1.3 4.4 2.6 4.4 1.1 0 1.2-1.8 1.6-3.4.3-1.2.7-2 1.8-2s1.5.8 1.8 2c.4 1.6.5 3.4 1.6 3.4 1.3 0 1.9-2.2 2.6-4.4.9-2.8 2-5.6 2-9C20 3.6 18.6 4.1 17 4.1c-1.8 0-2.8-1.1-5-1.1Z" fill="#fff"/></svg>
+      </div>
+      <div class="name">OdontoCloud</div>
+      <div class="sub">Gestão clínica</div>
+    </div>
+    <div class="login-clinic">Acenilde Clínica · Tenant t_a1b2c3</div>
+    <form id="login-form">
+      <div class="field"><label>E-mail</label><input id="login-email" type="email" placeholder="nome@acenilde.com" autocomplete="username" required></div>
+      <div class="field" style="margin-top:12px"><label>Palavra-passe</label><input id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password" required></div>
+      <div class="login-error" id="login-error" style="display:none"></div>
+      <button type="submit" class="btn btn-primary login-submit">Entrar</button>
+    </form>
+    <div class="login-hint">Protótipo — palavra-passe de demonstração para todas as contas: <b>demo123</b></div>
+    <div class="login-divider"><span>ou entra rapidamente como</span></div>
+    <div class="login-quick" id="login-quick"></div>
+  </div>
+</div>
+
+<div class="app" id="app-shell" style="display:none">
 
   <!-- ==================== SIDEBAR ==================== -->
   <aside class="sidebar">
@@ -394,9 +439,12 @@ input[type=color]{border:1px solid var(--line);border-radius:10px;background:#ff
           <a id="help-support"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Contactar suporte</a>
         </div>
       </div>
-      <div class="me">
-        <div class="ava">MO</div>
-        <div><div class="t">Mona Oliveira</div><div class="s">Dentista · Admin</div></div>
+      <div class="me" id="me-widget" style="position:relative;cursor:pointer">
+        <div class="ava" id="me-ava">MO</div>
+        <div><div class="t" id="me-nome">Mona Oliveira</div><div class="s" id="me-papel">Dentista · Admin</div></div>
+        <div class="menu-pop" id="pop-me" style="display:none;right:0;top:52px;min-width:160px">
+          <a id="btn-logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>Sair</a>
+        </div>
       </div>
     </div>
 
@@ -867,12 +915,7 @@ input[type=color]{border:1px solid var(--line);border-radius:10px;background:#ff
         <div class="atab-pane" data-apane="usuarios" style="display:none">
           <div class="card">
             <div style="padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center"><h3 style="font-size:15px">Usuários da clínica</h3><button class="btn btn-primary" style="margin-left:auto" id="btn-convidar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Convidar usuário</button></div>
-            <table class="tbl"><thead><tr><th>Usuário</th><th>E-mail</th><th>Papel</th><th>Status</th><th></th></tr></thead><tbody id="users-list">
-              <tr><td><div class="cell-name"><div class="ava-sm" style="background:var(--grad)">MO</div><div class="nm">Mona Oliveira</div></div></td><td>mona@acenilde.com</td><td><span class="badge b-indigo">Administrador</span></td><td><span class="badge b-green">Ativo</span></td><td class="row-act"><span class="ib">⋯</span></td></tr>
-              <tr><td><div class="cell-name"><div class="ava-sm" style="background:var(--violet)">RC</div><div class="nm">Ricardo Campos</div></div></td><td>ricardo@acenilde.com</td><td><span class="badge b-sky">Dentista</span></td><td><span class="badge b-green">Ativo</span></td><td class="row-act"><span class="ib">⋯</span></td></tr>
-              <tr><td><div class="cell-name"><div class="ava-sm" style="background:var(--green)">AL</div><div class="nm">Ana Lúcia</div></div></td><td>recepcao@acenilde.com</td><td><span class="badge b-gray">Recepção</span></td><td><span class="badge b-green">Ativo</span></td><td class="row-act"><span class="ib">⋯</span></td></tr>
-              <tr><td><div class="cell-name"><div class="ava-sm" style="background:var(--amber)">CF</div><div class="nm">Carlos Freitas</div></div></td><td>financeiro@acenilde.com</td><td><span class="badge b-amber">Financeiro</span></td><td><span class="badge b-gray">Convite pendente</span></td><td class="row-act"><span class="ib">⋯</span></td></tr>
-            </tbody></table>
+            <table class="tbl"><thead><tr><th>Usuário</th><th>E-mail</th><th>Papel</th><th>Status</th><th></th></tr></thead><tbody id="users-list"></tbody></table>
           </div>
           <div class="card card-pad" style="margin-top:18px">
             <h3 style="font-size:15px;margin-bottom:6px">Permissões por papel</h3>
@@ -965,8 +1008,27 @@ const screens = {
   estoque:{el:'s-estoque',crumb:'Estoque',sub:'Inventário'},
   ajustes:{el:'s-ajustes',crumb:'Ajustes',sub:'Configuração'},
 };
+/* ---------- Controlo de acesso por papel (espelha a tabela em Ajustes → Usuários & papéis) ---------- */
+const ROLE_ACCESS={
+  admin:['inteligencia','pacientes','ficha','agenda','financeiro','protese','estoque','ajustes'],
+  dentista:['inteligencia','pacientes','ficha','agenda','protese','estoque'],
+  recepcao:['pacientes','ficha','agenda','protese','estoque'],
+  financeiro:['financeiro','inteligencia'],
+};
+function roleDefaultScreen(role){return (ROLE_ACCESS[role]||['inteligencia']).find(k=>k!=='ficha')||'inteligencia';}
+function applyRoleAccess(role){
+  const allowed=ROLE_ACCESS[role]||[];
+  document.querySelectorAll('.sidebar .nav-item[data-go]').forEach(el=>{
+    el.style.display=allowed.includes(el.dataset.go)?'':'none';
+  });
+}
+window.__ocApplyRoleAccess=applyRoleAccess;
+window.__ocRoleDefaultScreen=roleDefaultScreen;
+
 function go(key){
   const s=screens[key]; if(!s) return;
+  const role=window.__ocCurrentUser?.role;
+  if(role && !(ROLE_ACCESS[role]||[]).includes(key)){toast('Sem permissão para aceder a este módulo.');return;}
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById(s.el).classList.add('active');
   document.getElementById('crumb').textContent=s.crumb;
@@ -1207,6 +1269,7 @@ function togglePop(btnId,popId){
 }
 togglePop('btn-notif','pop-notif');
 togglePop('btn-help','pop-help');
+togglePop('me-widget','pop-me');
 document.addEventListener('click',()=>{document.querySelectorAll('.menu-pop').forEach(p=>p.style.display='none');});
 ['help-center','help-shortcuts','help-support'].forEach(id=>{
   const el=document.getElementById(id); if(!el) return;
@@ -1804,6 +1867,12 @@ function migrate(d){
   if(!d.customDocs)d.customDocs=[];
   if(!d.integracaoFaturacao)d.integracaoFaturacao={provider:'',apiKey:'',ambiente:'producao',status:'desligado',ligadoEm:''};
   if(!d.faturasEmitidas)d.faturasEmitidas=[];
+  if(!d.users)d.users=[
+    {id:uid(),nome:'Mona Oliveira',email:'mona@acenilde.com',senha:'demo123',role:'admin',status:'ativo',cor:'var(--grad)'},
+    {id:uid(),nome:'Ricardo Campos',email:'ricardo@acenilde.com',senha:'demo123',role:'dentista',status:'ativo',cor:'var(--violet)'},
+    {id:uid(),nome:'Ana Lúcia',email:'recepcao@acenilde.com',senha:'demo123',role:'recepcao',status:'ativo',cor:'var(--green)'},
+    {id:uid(),nome:'Carlos Freitas',email:'financeiro@acenilde.com',senha:'demo123',role:'financeiro',status:'convite_pendente',cor:'var(--amber)'},
+  ];
   if(!d.consentDocsSeeded){
     d.customDocs=d.customDocs||[];
     CONSENT_DOCS_SEED.forEach(c=>d.customDocs.push({id:uid(),nome:c.nome,corpo:c.corpo,vars:[],consentimento:true}));
@@ -3533,24 +3602,36 @@ document.getElementById('cancel-clinic')?.addEventListener('click',()=>{
 });
 
 /* ===== Ajustes: Usuários & papéis ===== */
+const ROLE_LABEL={admin:'Administrador',dentista:'Dentista',recepcao:'Recepção',financeiro:'Financeiro'};
+const ROLE_BADGE={admin:'b-indigo',dentista:'b-sky',recepcao:'b-gray',financeiro:'b-amber'};
+function renderUsersAjustes(){
+  const host=document.getElementById('users-list');if(!host)return;
+  host.innerHTML=(db.users||[]).map(u=>`<tr>
+    <td><div class="cell-name"><div class="ava-sm" style="background:${u.cor}">${esc(ini(u.nome))}</div><div class="nm">${esc(u.nome)}</div></div></td>
+    <td>${esc(u.email)}</td>
+    <td><span class="badge ${ROLE_BADGE[u.role]}">${ROLE_LABEL[u.role]}</span></td>
+    <td><span class="badge ${u.status==='ativo'?'b-green':'b-gray'}">${u.status==='ativo'?'Ativo':'Convite pendente'}</span></td>
+    <td class="row-act"><span class="ib">⋯</span></td>
+  </tr>`).join('');
+}
 document.getElementById('btn-convidar')?.addEventListener('click',()=>{
   const box=miniModal(`<div class="modal-h"><h3>Convidar utilizador</h3><span class="modal-x" data-x>&times;</span></div>
   <div class="modal-b">
     <div class="field"><label>Nome *</label><input id="cv-nome" placeholder="Nome completo"></div>
     <div class="field" style="margin-top:10px"><label>E-mail *</label><input id="cv-email" type="email" placeholder="nome@clinica.pt"></div>
-    <div class="field" style="margin-top:10px"><label>Papel</label><select id="cv-papel"><option>Dentista</option><option>Recepção</option><option>Financeiro</option><option>Administrador</option></select></div>
+    <div class="field" style="margin-top:10px"><label>Papel</label><select id="cv-papel"><option value="dentista">Dentista</option><option value="recepcao">Recepção</option><option value="financeiro">Financeiro</option><option value="admin">Administrador</option></select></div>
   </div>
   <div class="modal-f"><button class="btn btn-ghost" data-x>Cancelar</button><button class="btn btn-primary" id="cv-save">Enviar convite</button></div>`);
   box.querySelector('#cv-save').onclick=()=>{
     const nome=box.querySelector('#cv-nome').value.trim(), email=box.querySelector('#cv-email').value.trim();
     if(!nome||!email){toast('Preencha nome e e-mail.');return;}
-    const papel=box.querySelector('#cv-papel').value;
-    const papelBadge={Dentista:'b-sky',Recepção:'b-gray',Financeiro:'b-amber',Administrador:'b-indigo'}[papel];
-    const iniciais=ini(nome);
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td><div class="cell-name"><div class="ava-sm" style="background:var(--slate)">${iniciais}</div><div class="nm">${esc(nome)}</div></div></td><td>${esc(email)}</td><td><span class="badge ${papelBadge}">${papel}</span></td><td><span class="badge b-gray">Convite pendente</span></td><td class="row-act"><span class="ib">⋯</span></td>`;
-    document.getElementById('users-list').appendChild(tr);
-    closeModal();toast('Convite enviado para '+email+'.');
+    if((db.users||[]).some(u=>u.email.toLowerCase()===email.toLowerCase())){toast('Já existe um utilizador com este e-mail.');return;}
+    const role=box.querySelector('#cv-papel').value;
+    const cores={admin:'var(--grad)',dentista:'var(--violet)',recepcao:'var(--green)',financeiro:'var(--amber)'};
+    db.users=db.users||[];
+    db.users.push({id:uid(),nome,email,senha:'demo123',role,status:'convite_pendente',cor:cores[role]});
+    audit('Criação',`Utilizador convidado: ${nome} (${email})`);
+    persist();renderUsersAjustes();closeModal();toast('Convite enviado para '+email+'.');
   };
 });
 
@@ -3732,11 +3813,70 @@ function openEmitirFatura(){
 }
 window.__ocRenderFaturacao=renderFaturacao;
 
+/* ===== Tela de acesso: autenticação e sessão ===== */
+const SESSION_KEY='odontocloud_session';
+let currentUser=null;
+function setCurrentUser(u){currentUser=u;window.__ocCurrentUser=u;}
+function findUserByEmail(email){return (db.users||[]).find(u=>u.email.toLowerCase()===String(email||'').trim().toLowerCase());}
+function renderLoginQuick(){
+  const host=document.getElementById('login-quick');if(!host)return;
+  host.innerHTML=(db.users||[]).filter(u=>u.status==='ativo').map(u=>`<button type="button" class="login-quick-item" data-quick="${u.id}">
+    <span class="ava-sm" style="background:${u.cor}">${esc(ini(u.nome))}</span>
+    <span class="lq-t"><b>${esc(u.nome)}</b><span>${ROLE_LABEL[u.role]}</span></span>
+  </button>`).join('');
+  host.querySelectorAll('[data-quick]').forEach(btn=>btn.onclick=()=>{
+    const u=db.users.find(x=>x.id===btn.dataset.quick);
+    if(u)doLogin(u.email,u.senha);
+  });
+}
+function doLogin(email,senha){
+  const errEl=document.getElementById('login-error');
+  const hideErr=()=>{errEl.style.display='none';};
+  const showErr=(msg)=>{errEl.textContent=msg;errEl.style.display='block';};
+  const u=findUserByEmail(email);
+  if(!u){showErr('Utilizador não encontrado.');return;}
+  if(u.status!=='ativo'){showErr('Convite pendente — esta conta ainda não foi ativada.');return;}
+  if(u.senha!==senha){showErr('Palavra-passe incorreta.');return;}
+  hideErr();
+  localStorage.setItem(SESSION_KEY,JSON.stringify({userId:u.id}));
+  enterApp(u);
+}
+function enterApp(u){
+  setCurrentUser(u);
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-shell').style.display='';
+  document.getElementById('me-ava').textContent=ini(u.nome);
+  document.getElementById('me-nome').textContent=u.nome;
+  document.getElementById('me-papel').textContent=ROLE_LABEL[u.role];
+  window.__ocApplyRoleAccess(u.role);
+  audit('Acesso',`Login efetuado (${u.nome})`);
+  go(window.__ocRoleDefaultScreen(u.role));
+}
+function logout(){
+  if(currentUser)audit('Acesso',`Logout efetuado (${currentUser.nome})`);
+  localStorage.removeItem(SESSION_KEY);
+  location.reload();
+}
+document.getElementById('login-form')?.addEventListener('submit',e=>{
+  e.preventDefault();
+  doLogin(document.getElementById('login-email').value,document.getElementById('login-pass').value);
+});
+document.getElementById('btn-logout')?.addEventListener('click',logout);
+
 /* init */
 renderTabelasAjustes();
 renderIntegracoes();
 renderFaturacao();
+renderUsersAjustes();
 renderList();
+
+(function bootAuth(){
+  let saved=null;
+  try{saved=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');}catch(e){}
+  const savedUser=saved && (db.users||[]).find(u=>u.id===saved.userId && u.status==='ativo');
+  if(savedUser)enterApp(savedUser);
+  else renderLoginQuick();
+})();
 })();
 </script>
 
