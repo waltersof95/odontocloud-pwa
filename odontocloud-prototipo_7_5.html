@@ -721,7 +721,6 @@ input[type=color]{border:1px solid var(--line);border-radius:10px;background:#ff
             <a class="tab active" data-tab="sobre">Sobre</a>
             <a class="tab" data-tab="orcamentos">Orçamentos</a>
             <a class="tab" data-tab="tratamentos">Tratamentos</a>
-            <a class="tab" data-tab="periograma">Periograma</a>
             <a class="tab" data-tab="anamnese">Anamnese</a>
             <a class="tab" data-tab="imagens">Imagens</a>
             <a class="tab" data-tab="documentos">Documentos</a>
@@ -737,7 +736,7 @@ input[type=color]{border:1px solid var(--line);border-radius:10px;background:#ff
     <section class="screen" id="s-agenda">
       <div class="page">
         <div class="page-head">
-          <div><h1>Agenda</h1><p>Semana de 08 a 14 de junho de 2026</p></div>
+          <div><h1>Agenda</h1><p id="agenda-periodo">Semana de 08 a 14 de junho de 2026</p></div>
           <div class="actions">
             <div class="seg" id="agenda-view-seg"><button data-view="dia">Dia</button><button class="on" data-view="semana">Semana</button><button data-view="mes">Mês</button></div>
             <button class="btn btn-ghost" id="agenda-prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -774,36 +773,42 @@ input[type=color]{border:1px solid var(--line);border-radius:10px;background:#ff
 
         <div class="ftab-pane" data-fpane="fluxo">
         <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px">
-          <div class="card kpi"><div class="ic" style="background:var(--green-50);color:var(--green)"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 14l5-5 5 5"/></svg></div><div class="lbl">Receitas</div><div class="val tnum" style="color:var(--green)" id="fin-kpi-receitas">241 084,65 €</div><div class="meta">A receber: 22 426 € · Previsto 263 511 €</div></div>
-          <div class="card kpi"><div class="ic" style="background:var(--red-50);color:var(--red)"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10l5 5 5-5"/></svg></div><div class="lbl">Despesas</div><div class="val tnum" style="color:var(--red)" id="fin-kpi-despesas">39 838,60 €</div><div class="meta">A pagar: 1 107 € · Previsto 40 945 €</div></div>
-          <div class="card kpi"><div class="ic" style="background:var(--indigo-50);color:var(--indigo-700)"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><div class="lbl">Saldo</div><div class="val tnum" style="color:var(--indigo-700)" id="fin-kpi-saldo">201 246,05 €</div><div class="meta">Previsto 222 565 €</div></div>
+          <div class="card kpi"><div class="ic" style="background:var(--green-50);color:var(--green)"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 14l5-5 5 5"/></svg></div><div class="lbl">Receitas</div><div class="val tnum" style="color:var(--green)" id="fin-kpi-receitas">0 €</div><div class="meta" id="fin-meta-receitas">—</div></div>
+          <div class="card kpi"><div class="ic" style="background:var(--red-50);color:var(--red)"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10l5 5 5-5"/></svg></div><div class="lbl">Despesas</div><div class="val tnum" style="color:var(--red)" id="fin-kpi-despesas">0 €</div><div class="meta" id="fin-meta-despesas">—</div></div>
+          <div class="card kpi"><div class="ic" style="background:var(--indigo-50);color:var(--indigo-700)"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><div class="lbl">Saldo</div><div class="val tnum" style="color:var(--indigo-700)" id="fin-kpi-saldo">0 €</div><div class="meta" id="fin-meta-saldo">—</div></div>
         </div>
         <div class="card">
           <div style="padding:14px 18px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center">
             <div class="field" style="margin:0;width:180px"><select id="fin-periodo"><option>Todo o período</option><option>Dezembro/2025</option><option>Novembro/2025</option><option>Outubro/2025</option></select></div>
             <button class="btn btn-ghost" id="fin-filtrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtrar</button>
           </div>
-          <table class="tbl"><thead><tr><th>Data</th><th>Nome</th><th>Parcela</th><th>Origem</th><th style="text-align:right">Valor</th><th>Status</th></tr></thead><tbody id="fin-tbody">
-            <tr data-periodo="Dezembro/2025"><td class="tnum">29/12/2025</td><td><b>Luana Bomfim</b></td><td class="tnum">4/11</td><td><span class="badge b-gray">Referência Multibanco</span></td><td class="tnum" style="text-align:right;font-weight:600;color:var(--green)">+ 280,00 €</td><td><span class="badge b-green">Recebido</span></td></tr>
-            <tr data-periodo="Dezembro/2025"><td class="tnum">29/12/2025</td><td>Taxa de cobrança — Luana Bomfim</td><td class="tnum">—</td><td><span class="badge b-gray">Taxa</span></td><td class="tnum" style="text-align:right;font-weight:600;color:var(--red)">− 3,87 €</td><td><span class="badge b-green">Pago</span></td></tr>
-            <tr data-periodo="Dezembro/2025"><td class="tnum">19/12/2025</td><td><b>Jamile Batista dos Santos</b></td><td class="tnum">8/8</td><td><span class="badge b-gray">Referência Multibanco</span></td><td class="tnum" style="text-align:right;font-weight:600;color:var(--green)">+ 413,75 €</td><td><span class="badge b-green">Recebido</span></td></tr>
-            <tr data-periodo="Dezembro/2025"><td class="tnum">18/12/2025</td><td><b>Leonardo Santos Silva</b></td><td class="tnum">3/5</td><td><span class="badge b-gray">Referência Multibanco</span></td><td class="tnum" style="text-align:right;font-weight:600;color:var(--green)">+ 504,35 €</td><td><span class="badge b-green">Recebido</span></td></tr>
-            <tr data-periodo="Dezembro/2025"><td class="tnum">02/12/2025</td><td><b>Camila Fernanda Rodrigues</b></td><td class="tnum">8/24</td><td><span class="badge b-violet" style="background:var(--violet-50);color:var(--violet)">MB Way</span></td><td class="tnum" style="text-align:right;font-weight:600;color:var(--green)">+ 1 000,00 €</td><td><span class="badge b-green">Recebido</span></td></tr>
-            <tr data-periodo="Dezembro/2025" style="background:var(--amber-50)"><td class="tnum">01/12/2025</td><td><b>Tainá Barros Leão da Silva</b></td><td class="tnum">5/5</td><td><span class="badge b-gray">Referência Multibanco</span></td><td class="tnum" style="text-align:right;font-weight:600">200,00 €</td><td><button class="btn btn-soft" data-receber style="padding:4px 12px">Receber</button></td></tr>
-          </tbody></table>
+          <table class="tbl"><thead><tr><th>Data</th><th>Nome</th><th>Parcela</th><th>Origem</th><th style="text-align:right">Valor</th><th>Status</th></tr></thead><tbody id="fin-tbody"></tbody></table>
         </div>
         </div><!-- /fluxo -->
 
-        <div class="ftab-pane" data-fpane="transacoes" style="display:none"><div class="card"><div class="empty"><div class="ei"><svg viewBox="0 0 24 24" width="28" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div><h3>Módulo em construção</h3><p>Extrato detalhado de transações por meio de pagamento. Será detalhado na próxima fase.</p></div></div></div>
+        <div class="ftab-pane" data-fpane="transacoes" style="display:none">
+          <div class="card" style="margin-bottom:18px">
+            <div style="padding:14px 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+              <div class="search" style="margin:0;flex:1;min-width:220px;max-width:320px;background:var(--bg)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+                <input id="tx-search" placeholder="Pesquisar por nome…">
+              </div>
+              <div class="field" style="margin:0;width:170px"><select id="tx-tipo"><option value="todos">Todos os tipos</option><option value="receita">Receitas</option><option value="despesa">Despesas</option></select></div>
+              <div class="field" style="margin:0;width:170px"><select id="tx-estado"><option value="todos">Todos os estados</option><option value="recebido">Recebido</option><option value="pago">Pago</option><option value="pendente">Pendente</option></select></div>
+              <span id="tx-result" style="margin-left:auto;font-size:12px;color:var(--muted)"></span>
+            </div>
+          </div>
+          <div class="card"><table class="tbl"><thead><tr><th>Data</th><th>Nome</th><th>Meio</th><th>Tipo</th><th style="text-align:right">Valor</th><th>Status</th></tr></thead><tbody id="tx-tbody"></tbody></table></div>
+        </div>
 
         <div class="ftab-pane" data-fpane="faturacao" style="display:none">
           <div class="banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>O OdontoCloud não emite faturas certificadas diretamente. Ligue o sistema de faturação já certificado pela AT que a clínica utiliza (TOC Online, InvoiceXpress, Vendus, Moloni…) em <b>Ajustes → Integrações</b> — os documentos fiscais passam a ser emitidos por esse sistema.</div>
           <div id="fatu-content"></div>
         </div>
 
-        <div class="ftab-pane" data-fpane="comissoes" style="display:none"><div class="card"><div class="empty"><div class="ei"><svg viewBox="0 0 24 24" width="28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg></div><h3>Módulo em construção</h3><p>Cálculo de comissões por profissional e procedimento. Será detalhado na próxima fase.</p></div></div></div>
+        <div class="ftab-pane" data-fpane="comissoes" style="display:none"><div id="comissoes-content"></div></div>
 
-        <div class="ftab-pane" data-fpane="carteira" style="display:none"><div class="card"><div class="empty"><div class="ei"><svg viewBox="0 0 24 24" width="28" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></div><h3>Módulo em construção</h3><p>Carteira digital do paciente (crédito de sinais/pré-pagamentos). Será detalhado na próxima fase.</p></div></div></div>
+        <div class="ftab-pane" data-fpane="carteira" style="display:none"><div id="carteira-content"></div></div>
       </div>
     </section>
 
@@ -1062,6 +1067,9 @@ document.querySelectorAll('#s-financeiro .tab[data-ftab]').forEach(tab=>{
     document.querySelectorAll('#s-financeiro .ftab-pane').forEach(p=>p.style.display='none');
     document.querySelector(`#s-financeiro [data-fpane="${tab.dataset.ftab}"]`).style.display='block';
     if(tab.dataset.ftab==='faturacao'&&window.__ocRenderFaturacao)window.__ocRenderFaturacao();
+    if(tab.dataset.ftab==='transacoes'&&window.__ocRenderTransacoes)window.__ocRenderTransacoes();
+    if(tab.dataset.ftab==='comissoes'&&window.__ocRenderComissoes)window.__ocRenderComissoes();
+    if(tab.dataset.ftab==='carteira'&&window.__ocRenderCarteira)window.__ocRenderCarteira();
   });
 });
 /* ---------- Filtro de período ---------- */
@@ -1191,31 +1199,54 @@ document.querySelectorAll('.tooth').forEach(t=>t.addEventListener('click',()=>{
   t.style.transform='scale(.94)';setTimeout(()=>t.style.transform='',120);
 }));
 
-/* ---------- Agenda (calendário semanal) ---------- */
-const dias=[['Seg','08'],['Ter','09'],['Qua','10'],['Qui','11'],['Sex','12'],['Sáb','13'],['Dom','14']];
+/* ---------- Agenda (calendário semanal, com navegação real de datas) ---------- */
+const DOW_NAMES=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb']; // Date.getDay(): 0=Dom..6=Sáb
+const MES_NOMES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
 const horas=['08h','09h','10h','11h','12h','13h','14h','15h','16h','17h'];
-const appts={ // 'dia-hora': [classe, paciente, proc]
-  '0-0':['a1','Maria Souza','Avaliação'],'0-2':['a2','João Lima','Manutenção orto'],
-  '1-1':['a1','Acenilde Andrade','Reavaliação HOF'],'1-4':['a3','Pedro Alves','Endodontia'],
-  '2-0':['a4','Clara Dias','Limpeza'],'2-3':['a1','Luana Bomfim','Moldagem'],
-  '3-2':['a2','Rita Silva','Instalação PSI'],'3-5':['a1','Camila Rodrigues','Retorno'],
-  '4-1':['a3','Leonardo Silva','Cirurgia'],'4-6':['a4','Jamile Santos','Profilaxia'],
+function mondayOf(d){
+  const x=new Date(d);x.setHours(0,0,0,0);
+  const day=x.getDay();
+  x.setDate(x.getDate()+(day===0?-6:1-day));
+  return x;
+}
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function isSameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();}
+let currentWeekStart=mondayOf(new Date('2026-06-08')); // âncora dos dados de exemplo
+let currentDiasArr=[];
+const appts={ // 'AAAA-MM-DD_horaIdx': [classe, paciente, proc]
+  '2026-06-08_0':['a1','Maria Souza','Avaliação'],'2026-06-08_2':['a2','João Lima','Manutenção orto'],
+  '2026-06-09_1':['a1','Acenilde Andrade','Reavaliação HOF'],'2026-06-09_4':['a3','Pedro Alves','Endodontia'],
+  '2026-06-10_0':['a4','Clara Dias','Limpeza'],'2026-06-10_3':['a1','Luana Bomfim','Moldagem'],
+  '2026-06-11_2':['a2','Rita Silva','Instalação PSI'],'2026-06-11_5':['a1','Camila Rodrigues','Retorno'],
+  '2026-06-12_1':['a3','Leonardo Silva','Cirurgia'],'2026-06-12_6':['a4','Jamile Santos','Profilaxia'],
 };
 const cal=document.getElementById('cal');
 function renderCal(){
   if(!cal)return;
+  currentDiasArr=[];
+  for(let i=0;i<7;i++){const d=new Date(currentWeekStart);d.setDate(d.getDate()+i);currentDiasArr.push(d);}
+  const hoje=new Date();
   let html=`<div class="ch"></div>`;
-  dias.forEach((d,i)=>html+=`<div class="ch ${i===1?'today':''}"><div class="dn">${d[0]}</div><div class="dd">${d[1]}<span style="font-size:11px;color:var(--muted)">/06</span></div></div>`);
+  currentDiasArr.forEach(d=>{
+    html+=`<div class="ch ${isSameDay(d,hoje)?'today':''}"><div class="dn">${DOW_NAMES[d.getDay()]}</div><div class="dd">${String(d.getDate()).padStart(2,'0')}<span style="font-size:11px;color:var(--muted)">/${String(d.getMonth()+1).padStart(2,'0')}</span></div></div>`;
+  });
   horas.forEach((h,hi)=>{
     html+=`<div class="hr-lbl">${h}</div>`;
-    for(let di=0;di<7;di++){
-      const key=`${di}-${hi}`;
+    currentDiasArr.forEach(d=>{
+      const key=`${ymd(d)}_${hi}`;
       const a=appts[key];
       html+=`<div class="cell" data-cell="${key}" title="${a?'':'Clique para agendar'}">${a?`<div class="appt ${a[0]}" draggable="true" data-appt="${key}" title="Clique para editar · arraste para mudar de horário"><div class="nm">${a[1]}</div>${a[2]}</div>`:''}</div>`;
-    }
+    });
   });
   cal.innerHTML=html;
   wireCalInteractions();
+  const periodoEl=document.getElementById('agenda-periodo');
+  if(periodoEl){
+    const first=currentDiasArr[0],last=currentDiasArr[6];
+    periodoEl.textContent=first.getMonth()===last.getMonth()
+      ?`Semana de ${String(first.getDate()).padStart(2,'0')} a ${String(last.getDate()).padStart(2,'0')} de ${MES_NOMES[last.getMonth()]} de ${last.getFullYear()}`
+      :`Semana de ${String(first.getDate()).padStart(2,'0')} de ${MES_NOMES[first.getMonth()]} a ${String(last.getDate()).padStart(2,'0')} de ${MES_NOMES[last.getMonth()]} de ${last.getFullYear()}`;
+  }
 }
 function wireCalInteractions(){
   cal.querySelectorAll('.appt').forEach(el=>{
@@ -1240,7 +1271,8 @@ function wireCalInteractions(){
       appts[toKey]=appts[fromKey];
       delete appts[fromKey];
       renderCal();
-      toast('Marcação movida para '+dias[toKey.split('-')[0]][0]+' às '+horas[toKey.split('-')[1]]+'.');
+      const [toDate,toHi]=toKey.split('_');
+      toast('Marcação movida para '+DOW_NAMES[new Date(toDate+'T00:00:00').getDay()]+' às '+horas[toHi]+'.');
     });
   });
 }
@@ -1259,20 +1291,21 @@ document.getElementById('agenda-view-seg')?.addEventListener('click',e=>{
   b.classList.add('on');
   if(b.dataset.view!=='semana') toast('Vista de '+b.textContent+' em construção — a mostrar Semana.');
 });
-['agenda-prev','agenda-next','agenda-hoje'].forEach(id=>{
-  document.getElementById(id)?.addEventListener('click',()=>toast('Navegação de datas ainda não implementada neste protótipo — dados de exemplo fixos na semana atual.'));
-});
+document.getElementById('agenda-prev')?.addEventListener('click',()=>{currentWeekStart.setDate(currentWeekStart.getDate()-7);renderCal();});
+document.getElementById('agenda-next')?.addEventListener('click',()=>{currentWeekStart.setDate(currentWeekStart.getDate()+7);renderCal();});
+document.getElementById('agenda-hoje')?.addEventListener('click',()=>{currentWeekStart=mondayOf(new Date());renderCal();toast('A mostrar a semana atual.');});
 const escAgenda=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function openAgendaModal(existingKey,prefillKey){
   const existing=existingKey?appts[existingKey]:null;
   const dhKey=existingKey||prefillKey;
-  const defDia=dhKey?+dhKey.split('-')[0]:0, defHora=dhKey?+dhKey.split('-')[1]:0;
+  const defDateStr=dhKey?dhKey.split('_')[0]:ymd(currentDiasArr[0]);
+  const defHora=dhKey?+dhKey.split('_')[1]:0;
   const box=miniModal(`<div class="modal-h"><h3>${existing?'Editar marcação':'Agendar consulta'}</h3><span class="modal-x" data-x>&times;</span></div>
   <div class="modal-b">
     <div class="field"><label>Paciente *</label><input id="ag-pac" placeholder="Nome do paciente" value="${existing?escAgenda(existing[1]):''}"></div>
     <div class="field" style="margin-top:10px"><label>Procedimento</label><input id="ag-proc" placeholder="Ex.: Avaliação, Limpeza…" value="${existing?escAgenda(existing[2]):''}"></div>
     <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:10px">
-      <div class="field"><label>Dia</label><select id="ag-dia">${dias.map((d,i)=>`<option value="${i}" ${defDia===i?'selected':''}>${d[0]} · ${d[1]}/06</option>`).join('')}</select></div>
+      <div class="field"><label>Dia</label><select id="ag-dia">${currentDiasArr.map(d=>{const ds=ymd(d);return `<option value="${ds}" ${defDateStr===ds?'selected':''}>${DOW_NAMES[d.getDay()]} · ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}</option>`;}).join('')}</select></div>
       <div class="field"><label>Hora</label><select id="ag-hora">${horas.map((h,i)=>`<option value="${i}" ${defHora===i?'selected':''}>${h}</option>`).join('')}</select></div>
       <div class="field" style="grid-column:1/-1"><label>Profissional</label><select id="ag-prof">
         <option value="a1" ${existing&&existing[0]==='a1'?'selected':''}>Mona Pinho de Oliveira</option>
@@ -1298,15 +1331,15 @@ function openAgendaModal(existingKey,prefillKey){
     const pac=box.querySelector('#ag-pac').value.trim();
     if(!pac){toast('Indique o nome do paciente.');return;}
     const proc=box.querySelector('#ag-proc').value.trim()||'Consulta';
-    const di=box.querySelector('#ag-dia').value, hi=box.querySelector('#ag-hora').value;
+    const dateStr=box.querySelector('#ag-dia').value, hi=box.querySelector('#ag-hora').value;
     const prof=box.querySelector('#ag-prof').value;
-    const key=di+'-'+hi;
+    const key=dateStr+'_'+hi;
     if(key!==existingKey && appts[key] && !confirm('Já existe uma marcação nesse horário ('+appts[key][1]+'). Substituir?'))return;
     if(existingKey && key!==existingKey) delete appts[existingKey];
     appts[key]=[prof,pac,proc];
     renderCal();
     document.getElementById('modal-root').classList.remove('show');
-    toast(existing?'Marcação atualizada.':'Consulta agendada para '+dias[di][0]+' às '+horas[hi]+'.');
+    toast(existing?'Marcação atualizada.':'Consulta agendada para '+DOW_NAMES[new Date(dateStr+'T00:00:00').getDay()]+' às '+horas[hi]+'.');
   };
 }
 document.getElementById('btn-agendar')?.addEventListener('click',()=>openAgendaModal(null,null));
@@ -1922,6 +1955,16 @@ function migrate(d){
   if(!d.customDocs)d.customDocs=[];
   if(!d.integracaoFaturacao)d.integracaoFaturacao={provider:'',apiKey:'',ambiente:'producao',status:'desligado',ligadoEm:''};
   if(!d.faturasEmitidas)d.faturasEmitidas=[];
+  if(!d.transactions)d.transactions=[
+    {id:uid(),data:'2025-12-29',nome:'Luana Bomfim',parcela:'4/11',meio:'Referência Multibanco',tipo:'receita',valor:280.00,status:'recebido'},
+    {id:uid(),data:'2025-12-29',nome:'Taxa de cobrança — Luana Bomfim',parcela:'—',meio:'Taxa',tipo:'despesa',valor:3.87,status:'pago'},
+    {id:uid(),data:'2025-12-19',nome:'Jamile Batista dos Santos',parcela:'8/8',meio:'Referência Multibanco',tipo:'receita',valor:413.75,status:'recebido'},
+    {id:uid(),data:'2025-12-18',nome:'Leonardo Santos Silva',parcela:'3/5',meio:'Referência Multibanco',tipo:'receita',valor:504.35,status:'recebido'},
+    {id:uid(),data:'2025-12-02',nome:'Camila Fernanda Rodrigues',parcela:'8/24',meio:'MB Way',tipo:'receita',valor:1000.00,status:'recebido'},
+    {id:uid(),data:'2025-12-01',nome:'Tainá Barros Leão da Silva',parcela:'5/5',meio:'Referência Multibanco',tipo:'receita',valor:200.00,status:'pendente'},
+  ];
+  if(!d.comissoesConfig)d.comissoesConfig={};
+  if(!d.comissoesPagamentos)d.comissoesPagamentos=[];
   if(!d.users)d.users=[
     {id:uid(),nome:'Mona Oliveira',email:'mona@acenilde.com',senha:'demo123',role:'admin',status:'ativo',cor:'var(--grad)'},
     {id:uid(),nome:'Ricardo Campos',email:'ricardo@acenilde.com',senha:'demo123',role:'dentista',status:'ativo',cor:'var(--violet)'},
@@ -1939,6 +1982,7 @@ function migrate(d){
     p.regionNotes=p.regionNotes||{}; p.consultas=p.consultas||[]; p.odontogram=p.odontogram||{};
     p.documents=p.documents||[]; p.images=p.images||[]; p.anamneses=p.anamneses||[]; p.budgets=p.budgets||[];
     p.periogramas=p.periogramas||[]; p.perioPlano=p.perioPlano||[];
+    p.carteira=p.carteira||{saldo:0,movimentos:[]};
   });
 }
 function load(){
@@ -2131,10 +2175,9 @@ function setTab(tab){
 }
 function renderBody(){
   const p=cur();if(!p)return;
-  const map={sobre:tabSobre,orcamentos:tabOrcamentos,tratamentos:tabTratamentos,periograma:tabPeriograma,anamnese:tabAnamnese,imagens:tabImagens,documentos:tabDocumentos,debitos:tabDebitos};
+  const map={sobre:tabSobre,orcamentos:tabOrcamentos,tratamentos:tabTratamentos,anamnese:tabAnamnese,imagens:tabImagens,documentos:tabDocumentos,debitos:tabDebitos};
   $('#ficha-body').innerHTML=(map[curTab]||(()=>''))(p);
   if(curTab==='tratamentos')mountTratamentos(p);
-  if(curTab==='periograma')mountPeriograma(p);
   if(curTab==='debitos')mountDebitos(p);
   if(curTab==='imagens')mountImagens(p);
 }
@@ -2311,11 +2354,17 @@ function tabTratamentos(p){
   const isDeci = odoMode==='deci';
   const S = isDeci ? deci : perm;
   const arc=(qq,up)=>`<div class="odo-arc${isDeci?' deci':''}"><div class="odo-quad">${qq[0].map(n=>tooth(n,up)).join('')}</div><div class="odo-quad">${qq[1].map(n=>tooth(n,up)).join('')}</div></div>`;
-  const toggle=`<div class="odo-toggle"><div class="odo-seg-wrap">
+  const toggleCard=`<div class="card card-pad" style="margin-bottom:18px">
+    <div class="odo-toggle" style="margin:0"><div class="odo-seg-wrap">
       <button class="odo-seg ${odoMode==='perm'?'on':''}" data-odo="perm">Permanentes</button>
       <button class="odo-seg ${odoMode==='deci'?'on':''}" data-odo="deci">Dec\u00edduos</button>
-    </div></div>`;
-  const grid=`${toggle}<div class="quad-wrap ${fcls}" id="odo-grid" style="position:relative">
+      <button class="odo-seg ${odoMode==='perio'?'on':''}" data-odo="perio">Periograma</button>
+    </div></div>
+  </div>`;
+  if(odoMode==='perio'){
+    return toggleCard+tabPeriograma(p);
+  }
+  const grid=`<div class="quad-wrap ${fcls}" id="odo-grid" style="position:relative">
       ${arc([S.ul,S.ur],true)}
       <div class="odo-mid"></div>
       ${arc([S.ll,S.lr],false)}
@@ -2343,7 +2392,7 @@ function tabTratamentos(p){
         <div class="evo-prof">Dr(a). ${esc(e.prof)||'\u2014'}</div>
       </div>`).join('')).join(''):'<p style="color:var(--muted);font-size:12.5px;padding:14px">Nenhuma evolu\u00e7\u00e3o registada. Finalize um procedimento ou adicione uma evolu\u00e7\u00e3o manual.</p>';
 
-  return `<div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start">
+  return `${toggleCard}<div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start">
     <div style="display:flex;flex-direction:column;gap:18px">
 
       <div class="card card-pad">
@@ -3530,14 +3579,48 @@ document.getElementById('btn-nova-tarefa')?.addEventListener('click',()=>{
 });
 
 /* ===== Financeiro ===== */
-let finReceitas=241084.65, finDespesas=39838.60;
+const MESES_PT_FIN=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+function periodoLabel(dataStr){
+  const d=new Date((dataStr||today())+'T00:00:00');
+  const m=MESES_PT_FIN[d.getMonth()]||'';
+  return m.charAt(0).toUpperCase()+m.slice(1)+'/'+d.getFullYear();
+}
+function statusBadge(status){
+  if(status==='recebido')return '<span class="badge b-green">Recebido</span>';
+  if(status==='pago')return '<span class="badge b-green">Pago</span>';
+  return '<button class="btn btn-soft" data-receber style="padding:4px 12px">Receber</button>';
+}
+function txRow(t){
+  const isReceita=t.tipo==='receita';
+  const cor=t.status==='pendente'?'var(--ink)':(isReceita?'var(--green)':'var(--red)');
+  const sinal=t.status==='pendente'?'':(isReceita?'+ ':'− ');
+  return `<tr data-id="${t.id}" data-periodo="${periodoLabel(t.data)}" ${t.status==='pendente'?'style="background:var(--amber-50)"':''}>
+    <td class="tnum">${fmtD(t.data)}</td><td><b>${esc(t.nome)}</b></td><td class="tnum">${esc(t.parcela||'—')}</td>
+    <td><span class="badge b-gray">${esc(t.meio)}</span></td>
+    <td class="tnum" style="text-align:right;font-weight:600;color:${cor}">${sinal}${money(t.valor).replace('€','').trim()} €</td>
+    <td>${statusBadge(t.status)}</td></tr>`;
+}
+function renderFluxoCaixa(){
+  const tb=document.getElementById('fin-tbody');if(!tb)return;
+  const list=(db.transactions||[]).slice().sort((a,b)=>b.data.localeCompare(a.data));
+  tb.innerHTML=list.length?list.map(txRow).join(''):`<tr><td colspan="6"><div class="empty" style="padding:30px 0">Nenhum lançamento registado.</div></td></tr>`;
+  updateFinKpis();
+}
 function updateFinKpis(){
-  document.getElementById('fin-kpi-receitas').textContent=money(finReceitas);
-  document.getElementById('fin-kpi-despesas').textContent=money(finDespesas);
-  document.getElementById('fin-kpi-saldo').textContent=money(finReceitas-finDespesas);
+  const list=db.transactions||[];
+  const receitas=list.filter(t=>t.tipo==='receita'&&t.status==='recebido').reduce((s,t)=>s+ +t.valor,0);
+  const despesas=list.filter(t=>t.tipo==='despesa'&&t.status==='pago').reduce((s,t)=>s+ +t.valor,0);
+  const aReceber=list.filter(t=>t.tipo==='receita'&&t.status==='pendente').reduce((s,t)=>s+ +t.valor,0);
+  const aPagar=list.filter(t=>t.tipo==='despesa'&&t.status==='pendente').reduce((s,t)=>s+ +t.valor,0);
+  document.getElementById('fin-kpi-receitas').textContent=money(receitas);
+  document.getElementById('fin-kpi-despesas').textContent=money(despesas);
+  document.getElementById('fin-kpi-saldo').textContent=money(receitas-despesas);
+  document.getElementById('fin-meta-receitas').textContent=`A receber: ${money(aReceber)}`;
+  document.getElementById('fin-meta-despesas').textContent=`A pagar: ${money(aPagar)}`;
+  document.getElementById('fin-meta-saldo').textContent=`Previsto: ${money(receitas-despesas+aReceber-aPagar)}`;
 }
 document.getElementById('fin-export')?.addEventListener('click',()=>{
-  const rows=[...document.querySelectorAll('#fin-tbody tr')].filter(r=>r.style.display!=='none');
+  const rows=[...document.querySelectorAll('#fin-tbody tr')].filter(r=>r.style.display!=='none'&&r.dataset.id);
   const csv=['Data;Nome;Parcela;Origem;Valor;Status',...rows.map(r=>{
     const c=[...r.children].map(td=>td.textContent.trim().replace(/\s+/g,' '));
     return c.join(';');
@@ -3549,18 +3632,19 @@ document.getElementById('fin-export')?.addEventListener('click',()=>{
 document.getElementById('fin-filtrar')?.addEventListener('click',()=>{
   const per=document.getElementById('fin-periodo').value;
   document.querySelectorAll('#fin-tbody tr').forEach(r=>{
+    if(!r.dataset.id)return;
     r.style.display=(per==='Todo o período'||r.dataset.periodo===per)?'':'none';
   });
   toast('Filtro aplicado — '+per+'.');
 });
 document.getElementById('fin-tbody')?.addEventListener('click',e=>{
   const btn=e.target.closest('[data-receber]');if(!btn)return;
-  const tr=btn.closest('tr'),valTd=tr.children[4];
-  const valor=parseFloat(valTd.textContent.replace(/[^\d,.-]/g,'').replace('.','').replace(',','.'));
-  finReceitas+=valor;updateFinKpis();
-  valTd.innerHTML='+ '+money(valor).replace('€','').trim()+' €';valTd.style.color='var(--green)';
-  tr.style.background='';
-  tr.children[5].innerHTML='<span class="badge b-green">Recebido</span>';
+  const tr=btn.closest('tr'),id=tr.dataset.id;
+  const t=(db.transactions||[]).find(x=>x.id===id);if(!t)return;
+  t.status=t.tipo==='receita'?'recebido':'pago';
+  audit('Alteração',`Pagamento registado: "${t.nome}" ${money(t.valor)}`);
+  persist();renderFluxoCaixa();
+  if(window.__ocRenderTransacoes)window.__ocRenderTransacoes();
   toast('Pagamento registado.');
 });
 document.getElementById('fin-add')?.addEventListener('click',()=>{
@@ -3583,18 +3667,203 @@ document.getElementById('fin-add')?.addEventListener('click',()=>{
     const tipo=box.querySelector('#fa-tipo').value;
     const meio=box.querySelector('#fa-meio').value;
     const status=box.querySelector('#fa-status').value;
-    const dataRaw=box.querySelector('#fa-data').value;
+    const dataRaw=box.querySelector('#fa-data').value||today();
     const liquidado=status==='liquidado';
-    if(liquidado){if(tipo==='receita')finReceitas+=valor;else finDespesas+=valor;updateFinKpis();}
-    const cor=tipo==='receita'?'var(--green)':'var(--red)';
-    const sinal=tipo==='receita'?'+ ':'− ';
-    const tr=document.createElement('tr');
-    if(!liquidado)tr.style.background='var(--amber-50)';
-    tr.innerHTML=`<td class="tnum">${fmtD(dataRaw)}</td><td><b>${esc(nome)}</b></td><td class="tnum">—</td><td><span class="badge b-gray">${esc(meio)}</span></td><td class="tnum" style="text-align:right;font-weight:600;color:${liquidado?cor:'var(--ink)'}">${liquidado?sinal:''}${money(valor).replace('€','').trim()} €</td><td>${liquidado?`<span class="badge b-green">${tipo==='receita'?'Recebido':'Pago'}</span>`:`<button class="btn btn-soft" data-receber style="padding:4px 12px">Receber</button>`}</td>`;
-    document.getElementById('fin-tbody').prepend(tr);
+    db.transactions=db.transactions||[];
+    db.transactions.unshift({id:uid(),data:dataRaw,nome,parcela:'—',meio,tipo,valor,status:liquidado?(tipo==='receita'?'recebido':'pago'):'pendente'});
+    audit('Criação',`Lançamento financeiro · ${money(valor)} (${nome})`);
+    persist();renderFluxoCaixa();
+    if(window.__ocRenderTransacoes)window.__ocRenderTransacoes();
     closeModal();toast('Lançamento adicionado.');
   };
 });
+renderFluxoCaixa();
+
+/* ===== Transações ===== */
+function renderTransacoesTab(){
+  const tb=document.getElementById('tx-tbody');if(!tb)return;
+  const q=(document.getElementById('tx-search')?.value||'').trim().toLowerCase();
+  const tipo=document.getElementById('tx-tipo')?.value||'todos';
+  const estado=document.getElementById('tx-estado')?.value||'todos';
+  let list=(db.transactions||[]).slice().sort((a,b)=>b.data.localeCompare(a.data));
+  if(q)list=list.filter(t=>t.nome.toLowerCase().includes(q));
+  if(tipo!=='todos')list=list.filter(t=>t.tipo===tipo);
+  if(estado!=='todos')list=list.filter(t=>t.status===estado);
+  tb.innerHTML=list.length?list.map(t=>{
+    const isReceita=t.tipo==='receita';
+    const cor=t.status==='pendente'?'var(--ink)':(isReceita?'var(--green)':'var(--red)');
+    const sinal=t.status==='pendente'?'':(isReceita?'+ ':'− ');
+    return `<tr><td class="tnum">${fmtD(t.data)}</td><td><b>${esc(t.nome)}</b></td><td><span class="badge b-gray">${esc(t.meio)}</span></td>
+      <td><span class="badge ${isReceita?'b-green':'b-red'}">${isReceita?'Receita':'Despesa'}</span></td>
+      <td class="tnum" style="text-align:right;font-weight:600;color:${cor}">${sinal}${money(t.valor).replace('€','').trim()} €</td>
+      <td>${t.status==='pendente'?'<span class="badge b-amber">Pendente</span>':(isReceita?'<span class="badge b-green">Recebido</span>':'<span class="badge b-green">Pago</span>')}</td></tr>`;
+  }).join(''):`<tr><td colspan="6"><div class="empty" style="padding:30px 0">Nenhuma transação encontrada.</div></td></tr>`;
+  const el=document.getElementById('tx-result');if(el)el.textContent=list.length+' transaç'+(list.length===1?'ão':'ões');
+}
+['tx-search','tx-tipo','tx-estado'].forEach(id=>{
+  document.getElementById(id)?.addEventListener('input',renderTransacoesTab);
+  document.getElementById(id)?.addEventListener('change',renderTransacoesTab);
+});
+window.__ocRenderTransacoes=renderTransacoesTab;
+
+/* ===== Comissões ===== */
+function computeComissoes(){
+  const porProf={};
+  (db.patients||[]).forEach(p=>{
+    (p.budgets||[]).filter(b=>b.status==='aprovado').forEach(b=>{
+      (b.items||[]).forEach(it=>{
+        if(it.realizado&&it.pago&&it.prof&&!it.comissaoPaga){
+          porProf[it.prof]=porProf[it.prof]||{qtd:0,total:0};
+          porProf[it.prof].qtd++;porProf[it.prof].total+=+it.valor;
+        }
+      });
+    });
+  });
+  return porProf;
+}
+function marcarComissaoPaga(profNome){
+  const pct=(db.comissoesConfig&&db.comissoesConfig[profNome]!=null)?db.comissoesConfig[profNome]:30;
+  let total=0,qtd=0;
+  (db.patients||[]).forEach(p=>{
+    (p.budgets||[]).filter(b=>b.status==='aprovado').forEach(b=>{
+      (b.items||[]).forEach(it=>{
+        if(it.realizado&&it.pago&&it.prof===profNome&&!it.comissaoPaga){
+          total+=+it.valor;qtd++;it.comissaoPaga=true;
+        }
+      });
+    });
+  });
+  if(!qtd){toast('Sem comissões pendentes para este profissional.');return;}
+  const valor=total*pct/100;
+  db.comissoesPagamentos=db.comissoesPagamentos||[];
+  db.comissoesPagamentos.unshift({id:uid(),profissional:profNome,base:total,percentual:pct,valor,data:today()});
+  audit('Alteração',`Comissão paga a ${profNome}: ${money(valor)}`);
+  persist();renderComissoesTab();
+  toast('Comissão de '+profNome+' marcada como paga ('+money(valor)+').');
+}
+function renderComissoesTab(){
+  const host=document.getElementById('comissoes-content');if(!host)return;
+  db.comissoesConfig=db.comissoesConfig||{};
+  const porProf=computeComissoes();
+  const profs=PROFISSIONAIS;
+  const rows=profs.map(nome=>{
+    const d=porProf[nome]||{qtd:0,total:0};
+    const pct=db.comissoesConfig[nome]!=null?db.comissoesConfig[nome]:30;
+    const valor=d.total*pct/100;
+    return `<tr>
+      <td><b>${esc(nome)}</b></td>
+      <td class="tnum" style="text-align:center">${d.qtd}</td>
+      <td class="tnum" style="text-align:right">${money(d.total)}</td>
+      <td style="text-align:center"><input type="number" class="comissao-pct" data-prof="${esc(nome)}" value="${pct}" min="0" max="100" style="width:60px;padding:5px 7px;border:1px solid var(--line);border-radius:7px;text-align:center">%</td>
+      <td class="tnum" style="text-align:right;font-weight:600;color:var(--indigo-700)">${money(valor)}</td>
+      <td style="text-align:right">${d.qtd?`<button class="btn btn-soft" data-marcar-comissao="${esc(nome)}" style="padding:5px 12px">Marcar paga</button>`:'<span class="badge b-gray">Sem pendentes</span>'}</td>
+    </tr>`;
+  }).join('');
+  const hist=(db.comissoesPagamentos||[]).slice().sort((a,b)=>b.data.localeCompare(a.data));
+  const histRows=hist.map(h=>`<tr><td class="tnum">${fmtD(h.data)}</td><td>${esc(h.profissional)}</td><td class="tnum" style="text-align:right">${money(h.base)}</td><td class="tnum" style="text-align:center">${h.percentual}%</td><td class="tnum" style="text-align:right;font-weight:600">${money(h.valor)}</td></tr>`).join('');
+  const totalAPagar=profs.reduce((s,nome)=>{const d=porProf[nome]||{total:0};const pct=db.comissoesConfig[nome]!=null?db.comissoesConfig[nome]:30;return s+d.total*pct/100;},0);
+  const qtdPend=profs.reduce((s,n)=>s+((porProf[n]||{qtd:0}).qtd),0);
+  host.innerHTML=`
+    <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px">
+      <div class="card kpi"><div class="lbl">Profissionais</div><div class="val tnum">${profs.length}</div></div>
+      <div class="card kpi"><div class="lbl">Tratamentos pendentes de comissão</div><div class="val tnum">${qtdPend}</div></div>
+      <div class="card kpi"><div class="lbl">Total a pagar</div><div class="val tnum" style="color:var(--indigo-700)">${money(totalAPagar)}</div></div>
+    </div>
+    <div class="card" style="margin-bottom:18px">
+      <div style="padding:14px 18px;border-bottom:1px solid var(--line)"><h3 style="font-size:15px">Comissões por profissional</h3><p style="color:var(--slate);font-size:12px;margin-top:2px">Calculado sobre tratamentos finalizados e pagos, ainda não incluídos num pagamento de comissão.</p></div>
+      <table class="tbl"><thead><tr><th>Profissional</th><th style="text-align:center">Tratamentos</th><th style="text-align:right">Valor produzido</th><th style="text-align:center">Comissão</th><th style="text-align:right">A pagar</th><th></th></tr></thead><tbody>${rows}</tbody></table>
+    </div>
+    <div class="card">
+      <div style="padding:14px 18px;border-bottom:1px solid var(--line)"><h3 style="font-size:15px">Histórico de pagamentos</h3></div>
+      ${histRows?`<table class="tbl"><thead><tr><th>Data</th><th>Profissional</th><th style="text-align:right">Base</th><th style="text-align:center">%</th><th style="text-align:right">Valor pago</th></tr></thead><tbody>${histRows}</tbody></table>`:emptyState('Nenhum pagamento de comissão registado.','Marque uma comissão como paga para começar o histórico.')}
+    </div>`;
+  host.querySelectorAll('.comissao-pct').forEach(inp=>{
+    inp.addEventListener('change',()=>{
+      const v=Math.max(0,Math.min(100,parseFloat(inp.value)||0));
+      db.comissoesConfig[inp.dataset.prof]=v;persist();renderComissoesTab();
+    });
+  });
+  host.querySelectorAll('[data-marcar-comissao]').forEach(b=>{
+    b.addEventListener('click',()=>marcarComissaoPaga(b.dataset.marcarComissao));
+  });
+}
+window.__ocRenderComissoes=renderComissoesTab;
+
+/* ===== Carteira digital ===== */
+function inits(nome){return (nome||'').split(' ').filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');}
+function renderCarteiraTab(){
+  const host=document.getElementById('carteira-content');if(!host)return;
+  const comSaldo=(db.patients||[]).filter(p=>p.carteira&&p.carteira.saldo>0).sort((a,b)=>b.carteira.saldo-a.carteira.saldo);
+  const total=comSaldo.reduce((s,p)=>s+p.carteira.saldo,0);
+  const rows=comSaldo.map(p=>`<tr>
+    <td><div class="cell-name"><div class="ava-sm" style="background:${avColor(p.nome)}">${esc(inits(p.nome))}</div><div class="nm">${esc(p.nome)}</div></div></td>
+    <td class="tnum" style="text-align:right;font-weight:600;color:var(--green)">${money(p.carteira.saldo)}</td>
+    <td class="tnum" style="text-align:center">${p.carteira.movimentos.length}</td>
+    <td style="text-align:right"><button class="btn btn-ghost" data-ver-carteira="${p.id}" style="padding:5px 12px">Ver histórico</button></td>
+  </tr>`).join('');
+  host.innerHTML=`
+    <div class="grid" style="grid-template-columns:repeat(2,1fr);margin-bottom:18px">
+      <div class="card kpi"><div class="lbl">Pacientes com saldo</div><div class="val tnum">${comSaldo.length}</div></div>
+      <div class="card kpi"><div class="lbl">Total em carteira</div><div class="val tnum" style="color:var(--green)">${money(total)}</div></div>
+    </div>
+    <div class="card">
+      <div style="padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px">
+        <h3 style="font-size:15px">Carteira digital dos pacientes</h3>
+        <button class="btn btn-primary" style="margin-left:auto" id="btn-add-credito"><svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Adicionar crédito</button>
+      </div>
+      ${rows?`<table class="tbl"><thead><tr><th>Paciente</th><th style="text-align:right">Saldo</th><th style="text-align:center">Movimentos</th><th></th></tr></thead><tbody>${rows}</tbody></table>`:emptyState('Nenhum paciente com saldo em carteira.','Adicione crédito a um paciente para começar.')}
+    </div>`;
+  host.querySelector('#btn-add-credito')?.addEventListener('click',()=>abrirMovCarteira(null,'credito'));
+  host.querySelectorAll('[data-ver-carteira]').forEach(b=>b.addEventListener('click',()=>abrirHistoricoCarteira(b.dataset.verCarteira)));
+}
+function abrirMovCarteira(pacienteId,tipoIni){
+  const pacientes=db.patients||[];
+  const box=miniModal(`<div class="modal-h"><h3>${tipoIni==='debito'?'Usar crédito':'Adicionar crédito'}</h3><span class="modal-x" data-x>&times;</span></div>
+  <div class="modal-b">
+    <div class="field"><label>Paciente *</label><select id="mc-pac" ${pacienteId?'disabled':''}>${pacienteId?'':'<option value="">Selecione…</option>'}${pacientes.map(p=>`<option value="${p.id}" ${p.id===pacienteId?'selected':''}>${esc(p.nome)}</option>`).join('')}</select></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:10px">
+      <div class="field"><label>Tipo</label><select id="mc-tipo"><option value="credito" ${tipoIni==='credito'?'selected':''}>Crédito (entrada)</option><option value="debito" ${tipoIni==='debito'?'selected':''}>Uso de crédito (saída)</option></select></div>
+      <div class="field"><label>Valor (€) *</label><input id="mc-valor" type="number" min="0" step="0.01" placeholder="0,00"></div>
+      <div class="field" style="grid-column:1/-1"><label>Motivo</label><input id="mc-motivo" placeholder="Ex.: Sinal, pré-pagamento, reembolso…"></div>
+    </div>
+  </div>
+  <div class="modal-f"><button class="btn btn-ghost" data-x>Cancelar</button><button class="btn btn-primary" id="mc-save">Guardar</button></div>`);
+  box.querySelector('#mc-save').onclick=()=>{
+    const pid=pacienteId||box.querySelector('#mc-pac').value;
+    const valor=parseFloat(box.querySelector('#mc-valor').value);
+    const tipo=box.querySelector('#mc-tipo').value;
+    const motivo=box.querySelector('#mc-motivo').value.trim()||(tipo==='credito'?'Crédito adicionado':'Uso de crédito');
+    if(!pid||!valor){toast('Selecione o paciente e indique o valor.');return;}
+    const p=pacientes.find(x=>x.id===pid);if(!p)return;
+    p.carteira=p.carteira||{saldo:0,movimentos:[]};
+    if(tipo==='debito'&&valor>p.carteira.saldo){toast('Saldo insuficiente para esta operação.');return;}
+    p.carteira.saldo+=(tipo==='credito'?valor:-valor);
+    p.carteira.movimentos.unshift({id:uid(),data:today(),tipo,valor,motivo});
+    audit('Alteração',`Carteira digital · ${tipo==='credito'?'crédito':'uso'} de ${money(valor)} (${p.nome})`);
+    persist();renderCarteiraTab();closeModal();
+    toast(tipo==='credito'?'Crédito adicionado.':'Crédito utilizado.');
+  };
+}
+function abrirHistoricoCarteira(pacienteId){
+  const p=(db.patients||[]).find(x=>x.id===pacienteId);if(!p)return;
+  p.carteira=p.carteira||{saldo:0,movimentos:[]};
+  const movs=p.carteira.movimentos.map(m=>`<tr><td class="tnum">${fmtD(m.data)}</td><td>${m.tipo==='credito'?'<span class="badge b-green">Crédito</span>':'<span class="badge b-amber">Uso</span>'}</td><td>${esc(m.motivo)}</td><td class="tnum" style="text-align:right;font-weight:600;color:${m.tipo==='credito'?'var(--green)':'var(--red)'}">${m.tipo==='credito'?'+ ':'− '}${money(m.valor).replace('€','').trim()} €</td></tr>`).join('');
+  const box=miniModal(`<div class="modal-h"><h3>Carteira digital · ${esc(p.nome)}</h3><span class="modal-x" data-x>&times;</span></div>
+  <div class="modal-b">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div><div style="font-size:12px;color:var(--muted)">Saldo atual</div><div style="font-size:22px;font-weight:700;color:var(--green)">${money(p.carteira.saldo)}</div></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-soft" id="mc-h-credito">Adicionar crédito</button>
+        <button class="btn btn-ghost" id="mc-h-debito">Usar crédito</button>
+      </div>
+    </div>
+    ${movs?`<table class="tbl"><thead><tr><th>Data</th><th>Tipo</th><th>Motivo</th><th style="text-align:right">Valor</th></tr></thead><tbody>${movs}</tbody></table>`:emptyState('Sem movimentos registados.','Adicione crédito para começar o histórico.')}
+  </div>
+  <div class="modal-f"><button class="btn btn-ghost" data-x>Fechar</button></div>`);
+  box.querySelector('#mc-h-credito').onclick=()=>abrirMovCarteira(p.id,'credito');
+  box.querySelector('#mc-h-debito').onclick=()=>abrirMovCarteira(p.id,'debito');
+}
+window.__ocRenderCarteira=renderCarteiraTab;
 
 /* ===== Controle de prótese: kanban ===== */
 const PROC_LAB=['Inlay/Onlay cerômero','Coroa de porcelana','PPR com grampos','PSI prótese sobre implante','Faceta em porcelana','Protocolo All-on-four'];
